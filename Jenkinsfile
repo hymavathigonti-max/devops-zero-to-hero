@@ -3,16 +3,13 @@ pipeline {
 
     stages {
 
-        stage('Clone Verification') {
+        stage('Verify SSH to EC2') {
             steps {
-                echo 'Hello Hymavathi!'
-            }
-        }
-
-        stage('Workspace Info') {
-            steps {
-                sh 'pwd'
-                sh 'ls -R'
+                sshagent(credentials: ['ec2-ssh-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no ubuntu@13.232.123.232 "hostname && whoami && pwd"
+                    '''
+                }
             }
         }
     }
